@@ -16,6 +16,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false
   },
   {
@@ -36,12 +37,19 @@
     }
   },
   {
-    "tags": [],
+    "tags": [
+      {
+        "type": "private",
+        "string": ""
+      }
+    ],
     "description": {
-      "full": "@private",
-      "summary": "@private",
+      "full": "String containing base64 chars.",
+      "summary": "String containing base64 chars.",
       "body": ""
     },
+    "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "_keyStr : \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\","
   },
@@ -56,8 +64,11 @@
         "description": "The string to encode."
       },
       {
-        "type": "returns",
-        "string": "{String} The base64-encoded string."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The base64-encoded string."
       }
     ],
     "description": {
@@ -66,8 +77,14 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "encode: function (input) {\n\t\tif (window.btoa) {\n\t\t\treturn window.btoa(unescape(encodeURIComponent(input)));\n\t\t}\n\n\t\tvar output = \"\";\n\t\tvar chr1, chr2, chr3, enc1, enc2, enc3, enc4;\n\t\tvar i = 0;\n \n\t\twhile (i < input.length) {\n \n\t\t\tchr1 = input.charCodeAt(i++);\n\t\t\tchr2 = input.charCodeAt(i++);\n\t\t\tchr3 = input.charCodeAt(i++);\n \n\t\t\tenc1 = chr1 >> 2;\n\t\t\tenc2 = ((chr1 & 3) << 4) | (chr2 >> 4);\n\t\t\tenc3 = ((chr2 & 15) << 2) | (chr3 >> 6);\n\t\t\tenc4 = chr3 & 63;\n \n\t\t\tif (isNaN(chr2)) {\n\t\t\t\tenc3 = enc4 = 64;\n\t\t\t} else if (isNaN(chr3)) {\n\t\t\t\tenc4 = 64;\n\t\t\t}\n \n\t\t\toutput = output +\n\t\t\tthis._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +\n\t\t\tthis._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);\n \n\t\t}\n \n\t\treturn output;\n\t},"
+    "code": "encode: function (input) {\n\t\tif (window.btoa) {\n\t\t\treturn window.btoa(unescape(encodeURIComponent(input)));\n\t\t}\n\n\t\tvar output = \"\";\n\t\tvar chr1, chr2, chr3, enc1, enc2, enc3, enc4;\n\t\tvar i = 0;\n \n\t\twhile (i < input.length) {\n \n\t\t\tchr1 = input.charCodeAt(i++);\n\t\t\tchr2 = input.charCodeAt(i++);\n\t\t\tchr3 = input.charCodeAt(i++);\n \n\t\t\tenc1 = chr1 >> 2;\n\t\t\tenc2 = ((chr1 & 3) << 4) | (chr2 >> 4);\n\t\t\tenc3 = ((chr2 & 15) << 2) | (chr3 >> 6);\n\t\t\tenc4 = chr3 & 63;\n \n\t\t\tif (isNaN(chr2)) {\n\t\t\t\tenc3 = enc4 = 64;\n\t\t\t} else if (isNaN(chr3)) {\n\t\t\t\tenc4 = 64;\n\t\t\t}\n \n\t\t\toutput = output +\n\t\t\tthis._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +\n\t\t\tthis._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);\n \n\t\t}\n \n\t\treturn output;\n\t},",
+    "ctx": {
+      "type": "method",
+      "name": "encode",
+      "string": "undefined.prototype.encode()"
+    }
   },
   {
     "tags": [
@@ -80,8 +97,11 @@
         "description": "The base64-encoded string."
       },
       {
-        "type": "returns",
-        "string": "{String} The decoded string."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The decoded string."
       }
     ],
     "description": {
@@ -90,8 +110,14 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "decode: function (input) {\n\t\tif (window.atob) {\n\t\t\treturn decodeURIComponent(escape(window.atob(input)));\n\t\t}\n\n\t\tvar output = \"\";\n\t\tvar chr1, chr2, chr3;\n\t\tvar enc1, enc2, enc3, enc4;\n\t\tvar i = 0;\n \n\t\tinput = input.replace(/[^A-Za-z0-9\\+\\/\\=]/g, \"\");\n \n\t\twhile (i < input.length) {\n \n\t\t\tenc1 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc2 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc3 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc4 = this._keyStr.indexOf(input.charAt(i++));\n \n\t\t\tchr1 = (enc1 << 2) | (enc2 >> 4);\n\t\t\tchr2 = ((enc2 & 15) << 4) | (enc3 >> 2);\n\t\t\tchr3 = ((enc3 & 3) << 6) | enc4;\n \n\t\t\toutput = output + String.fromCharCode(chr1);\n \n\t\t\tif (enc3 != 64) {\n\t\t\t\toutput = output + String.fromCharCode(chr2);\n\t\t\t}\n\t\t\tif (enc4 != 64) {\n\t\t\t\toutput = output + String.fromCharCode(chr3);\n\t\t\t}\n \n\t\t}\n \n\t\treturn output;\n\t},\n \n\t// method for UTF-8 encoding\n\tutf8Encode: function (string) {\n\t\tstring = string.replace(/\\r\\n/g,\"\\n\");\n\t\tvar utftext = \"\";\n \n\t\tfor (var n = 0; n < string.length; n++) {\n \n\t\t\tvar c = string.charCodeAt(n);\n \n\t\t\tif (c < 128) {\n\t\t\t\tutftext += String.fromCharCode(c);\n\t\t\t}\n\t\t\telse if((c > 127) && (c < 2048)) {\n\t\t\t\tutftext += String.fromCharCode((c >> 6) | 192);\n\t\t\t\tutftext += String.fromCharCode((c & 63) | 128);\n\t\t\t}\n\t\t\telse {\n\t\t\t\tutftext += String.fromCharCode((c >> 12) | 224);\n\t\t\t\tutftext += String.fromCharCode(((c >> 6) & 63) | 128);\n\t\t\t\tutftext += String.fromCharCode((c & 63) | 128);\n\t\t\t}\n \n\t\t}\n \n\t\treturn utftext;\n\t},\n \n\t// method for UTF-8 decoding\n\tutf8Decode: function (utftext) {\n\t\tvar string = \"\";\n\t\tvar i = 0;\n\t\tvar c = c1 = c2 = 0;\n \n\t\twhile ( i < utftext.length ) {\n \n\t\t\tc = utftext.charCodeAt(i);\n \n\t\t\tif (c < 128) {\n\t\t\t\tstring += String.fromCharCode(c);\n\t\t\t\ti++;\n\t\t\t}\n\t\t\telse if((c > 191) && (c < 224)) {\n\t\t\t\tc2 = utftext.charCodeAt(i+1);\n\t\t\t\tstring += String.fromCharCode(((c & 31) << 6) | (c2 & 63));\n\t\t\t\ti += 2;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tc2 = utftext.charCodeAt(i+1);\n\t\t\t\tc3 = utftext.charCodeAt(i+2);\n\t\t\t\tstring += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));\n\t\t\t\ti += 3;\n\t\t\t}\n \n\t\t}\n \n\t\treturn string;\n\t}\n};"
+    "code": "decode: function (input) {\n\t\tif (window.atob) {\n\t\t\treturn decodeURIComponent(escape(window.atob(input)));\n\t\t}\n\n\t\tvar output = \"\";\n\t\tvar chr1, chr2, chr3;\n\t\tvar enc1, enc2, enc3, enc4;\n\t\tvar i = 0;\n \n\t\tinput = input.replace(/[^A-Za-z0-9\\+\\/\\=]/g, \"\");\n \n\t\twhile (i < input.length) {\n \n\t\t\tenc1 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc2 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc3 = this._keyStr.indexOf(input.charAt(i++));\n\t\t\tenc4 = this._keyStr.indexOf(input.charAt(i++));\n \n\t\t\tchr1 = (enc1 << 2) | (enc2 >> 4);\n\t\t\tchr2 = ((enc2 & 15) << 4) | (enc3 >> 2);\n\t\t\tchr3 = ((enc3 & 3) << 6) | enc4;\n \n\t\t\toutput = output + String.fromCharCode(chr1);\n \n\t\t\tif (enc3 != 64) {\n\t\t\t\toutput = output + String.fromCharCode(chr2);\n\t\t\t}\n\t\t\tif (enc4 != 64) {\n\t\t\t\toutput = output + String.fromCharCode(chr3);\n\t\t\t}\n \n\t\t}\n \n\t\treturn output;\n\t},\n \n\t// method for UTF-8 encoding\n\tutf8Encode: function (string) {\n\t\tstring = string.replace(/\\r\\n/g,\"\\n\");\n\t\tvar utftext = \"\";\n \n\t\tfor (var n = 0; n < string.length; n++) {\n \n\t\t\tvar c = string.charCodeAt(n);\n \n\t\t\tif (c < 128) {\n\t\t\t\tutftext += String.fromCharCode(c);\n\t\t\t}\n\t\t\telse if((c > 127) && (c < 2048)) {\n\t\t\t\tutftext += String.fromCharCode((c >> 6) | 192);\n\t\t\t\tutftext += String.fromCharCode((c & 63) | 128);\n\t\t\t}\n\t\t\telse {\n\t\t\t\tutftext += String.fromCharCode((c >> 12) | 224);\n\t\t\t\tutftext += String.fromCharCode(((c >> 6) & 63) | 128);\n\t\t\t\tutftext += String.fromCharCode((c & 63) | 128);\n\t\t\t}\n \n\t\t}\n \n\t\treturn utftext;\n\t},\n \n\t// method for UTF-8 decoding\n\tutf8Decode: function (utftext) {\n\t\tvar string = \"\";\n\t\tvar i = 0;\n\t\tvar c = c1 = c2 = 0;\n \n\t\twhile ( i < utftext.length ) {\n \n\t\t\tc = utftext.charCodeAt(i);\n \n\t\t\tif (c < 128) {\n\t\t\t\tstring += String.fromCharCode(c);\n\t\t\t\ti++;\n\t\t\t}\n\t\t\telse if((c > 191) && (c < 224)) {\n\t\t\t\tc2 = utftext.charCodeAt(i+1);\n\t\t\t\tstring += String.fromCharCode(((c & 31) << 6) | (c2 & 63));\n\t\t\t\ti += 2;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tc2 = utftext.charCodeAt(i+1);\n\t\t\t\tc3 = utftext.charCodeAt(i+2);\n\t\t\t\tstring += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));\n\t\t\t\ti += 3;\n\t\t\t}\n \n\t\t}\n \n\t\treturn string;\n\t}\n};",
+    "ctx": {
+      "type": "method",
+      "name": "decode",
+      "string": "undefined.prototype.decode()"
+    }
   },
   {
     "tags": [
@@ -114,69 +140,46 @@
       {
         "type": "since",
         "string": "1.0alpha1"
-      },
-      {
-        "type": "example",
-        "string": ""
-      },
-      {
-        "type": "//Listing",
-        "string": "files in the user's home folder"
-      },
-      {
-        "type": "W.File.listDir('~',",
-        "string": "[function(files) { //We want to list files in the home folder (which is \"~\")"
-      },
-      {
-        "type": "",
-        "string": "var list = 'Files : ';"
-      },
-      {
-        "type": "",
-        "string": "for (var i = 0; i < files.length; i++) { //For each file"
-      },
-      {
-        "type": "",
-        "string": "var file = files[i];"
-      },
-      {
-        "type": "",
-        "string": "list += ' '+file.get('basename'); //Add the file to the list"
-      },
-      {
-        "type": "",
-        "string": "}"
-      },
-      {
-        "type": "",
-        "string": "alert(list); //Show the list"
-      },
-      {
-        "type": "},",
-        "string": "function(response) { //An error occured"
-      },
-      {
-        "type": "",
-        "string": "response.triggerError('Cannot list files in folder');"
-      },
-      {
-        "type": "}]);",
-        "string": ""
       }
     ],
     "description": {
-      "full": "A file.",
-      "summary": "A file.",
-      "body": ""
+      "full": "`Webos.File` represents a file.\n\nListing files in the user's home folder :\n```js\nW.File.listDir('~', [function(files) { //We want to list files in the home folder (which is \"~\")\n   var list = 'Files : ';\n   for (var i = 0; i < files.length; i++) { //For each file\n      var file = files[i];\n      list += ' '+file.get('basename'); //Add the file to the list\n   }\n   alert(list); //Show the list\n}, function(response) { //An error occured\n   response.triggerError('Cannot list files in folder');\n}]);\n```\n",
+      "summary": "`Webos.File` represents a file.",
+      "body": "Listing files in the user's home folder :\n```js\nW.File.listDir('~', [function(files) { //We want to list files in the home folder (which is \"~\")\n   var list = 'Files : ';\n   for (var i = 0; i < files.length; i++) { //For each file\n      var file = files[i];\n      list += ' '+file.get('basename'); //Add the file to the list\n   }\n   alert(list); //Show the list\n}, function(response) { //An error occured\n   response.triggerError('Cannot list files in folder');\n}]);\n```\n"
     },
     "isPrivate": false,
+    "isConstructor": true,
     "ignore": false,
-    "code": "Webos.File = function WFile(data) {\n\tWebos.Model.call(this, data); //Inherits from Webos.Model\n};\nWebos.File.prototype = {",
+    "code": "Webos.File = function WFile(data) {\n\tWebos.Model.call(this, data); //Inherits from Webos.Model\n};",
     "ctx": {
-      "type": "method",
+      "type": "constructor",
       "receiver": "Webos",
       "name": "File",
       "string": "Webos.File()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "namespace",
+        "string": "Webos.File"
+      }
+    ],
+    "description": {
+      "full": "Webos.File's prototype.",
+      "summary": "Webos.File's prototype.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "ignore": false,
+    "code": "Webos.File.prototype = {",
+    "ctx": {
+      "type": "prototype",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "Webos.File",
+      "string": "Webos.File.prototype"
     }
   },
   {
@@ -196,8 +199,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "hydrate: function(data) {\n\t\tvar path = (data.path || this.get('path'));\n\t\tif (path) {\n\t\t\tif (!data.dirname) { //On définit automatiquement le dossier parent si non présent\n\t\t\t\tif (path.indexOf('/', 1) != -1) {\n\t\t\t\t\tdata.dirname = path.replace(/\\/[^\\/]*\\/?$/, '');\n\t\t\t\t} else if (path.indexOf('/') == -1 || path == '/') {\n\t\t\t\t\tdata.dirname = undefined;\n\t\t\t\t} else if (path.indexOf('/') == 0) {\n\t\t\t\t\tdata.dirname = '/';\n\t\t\t\t}\n\t\t\t}\n\t\t\tif (!data.basename) { //On définit automatiquement le nom du fichier si non présent\n\t\t\t\tdata.basename = path.replace(/^.*[\\/\\\\]/g, '');\n\t\t\t}\n\t\t\tif (data.is_dir === false && !data.extension) { //On définit automatiquement l'extension du fichier si non présent et que le fichier n'est pas un dossier\n\t\t\t\tdata.extension = (/\\./.test(path)) ? /[^.]+$/.exec(path)[0] : '';\n\t\t\t}\n\t\t\tif (data.extension) { //On met l'extension en minuscules\n\t\t\t\tdata.extension = data.extension.toLowerCase();\n\t\t\t}\n\t\t}\n\n\t\tif (typeof data.is_binary == 'undefined') {\n\t\t\tif (data.mime_type) {\n\t\t\t\tdata.is_binary = (data.mime_type.indexOf('text/') != 0);\n\t\t\t} else if (!this.exists('is_binary')) {\n\t\t\t\tdata.is_binary = true;\n\t\t\t}\n\t\t}\n\n\t\tif (typeof data.labels == 'undefined') {\n\t\t\tdata.labels = {};\n\t\t}\n\t\tif (!data.labels.hidden) {\n\t\t\tdata.labels.hidden = (data.basename.charAt(0) == '.');\n\t\t}\n\t\tif (typeof data.labels.trashed == 'undefined') {\n\t\t\tdata.labels.trashed = false;\n\t\t}\n\n\t\treturn Webos.Model.prototype.hydrate.call(this, data);\n\t},"
+    "code": "hydrate: function(data) {\n\t\tvar path = (data.path || this.get('path'));\n\t\tif (path) {\n\t\t\tif (!data.dirname) { //On définit automatiquement le dossier parent si non présent\n\t\t\t\tif (path.indexOf('/', 1) != -1) {\n\t\t\t\t\tdata.dirname = path.replace(/\\/[^\\/]*\\/?$/, '');\n\t\t\t\t} else if (path.indexOf('/') == -1 || path == '/') {\n\t\t\t\t\tdata.dirname = undefined;\n\t\t\t\t} else if (path.indexOf('/') == 0) {\n\t\t\t\t\tdata.dirname = '/';\n\t\t\t\t}\n\t\t\t}\n\t\t\tif (!data.basename) { //On définit automatiquement le nom du fichier si non présent\n\t\t\t\tdata.basename = path.replace(/^.*[\\/\\\\]/g, '');\n\t\t\t}\n\t\t\tif (data.is_dir === false && !data.extension) { //On définit automatiquement l'extension du fichier si non présent et que le fichier n'est pas un dossier\n\t\t\t\tdata.extension = (/\\./.test(path)) ? /[^.]+$/.exec(path)[0] : '';\n\t\t\t}\n\t\t\tif (data.extension) { //On met l'extension en minuscules\n\t\t\t\tdata.extension = data.extension.toLowerCase();\n\t\t\t}\n\t\t}\n\n\t\tif (typeof data.is_binary == 'undefined') {\n\t\t\tif (data.mime_type) {\n\t\t\t\tdata.is_binary = (data.mime_type.indexOf('text/') != 0);\n\t\t\t} else if (!this.exists('is_binary')) {\n\t\t\t\tdata.is_binary = true;\n\t\t\t}\n\t\t}\n\n\t\tif (typeof data.labels == 'undefined') {\n\t\t\tdata.labels = {};\n\t\t}\n\t\tif (!data.labels.hidden) {\n\t\t\tdata.labels.hidden = (data.basename.charAt(0) == '.');\n\t\t}\n\t\tif (typeof data.labels.trashed == 'undefined') {\n\t\t\tdata.labels.trashed = false;\n\t\t}\n\n\t\treturn Webos.Model.prototype.hydrate.call(this, data);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "hydrate",
+      "string": "Webos.File.prototype.hydrate()"
+    }
   },
   {
     "tags": [
@@ -220,8 +231,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "_updateData: function(data) {\n\t\tvar updatedData = {};\n\t\tfor (var key in data) {\n\t\t\tif (this._get(key) !== data[key]) {\n\t\t\t\tupdatedData[key] = data[key];\n\t\t\t}\n\t\t}\n\n\t\tvar oldPath = this.get('path');\n\n\t\t//Il FAUT creer une copie de l'objet \"updatedData\" sinon il sera modifie par la fonction \"this.hydrate\"\n\t\tthis.hydrate($.extend({}, updatedData));\n\n\t\tvar parentDirPath = this.get('dirname');\n\t\tif (parentDirPath != this.get('path')) { //Dossier racine ?\n\t\t\tif (Webos.File.isCached(parentDirPath)) {\n\t\t\t\tvar parentDir = Webos.File.get(parentDirPath);\n\t\t\t\tif (parentDir._contents) {\n\t\t\t\t\tvar found = false;\n\t\t\t\t\tfor (var i = 0; i < parentDir._contents.length; i++) {\n\t\t\t\t\t\tif (parentDir._contents[i].get('path') == this.get('path')) {\n\t\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif (!found) {\n\t\t\t\t\t\tparentDir._contents.push(this);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tvar newPath = this.get('path');\n\n\t\tif (oldPath != newPath) {\n\t\t\tvar thisData = $.extend({}, this.data());\n\t\t\tthis.hydrate({\n\t\t\t\tpath: oldPath\n\t\t\t});\n\t\t\tthis._remove();\n\n\t\t\tvar file = Webos.File.get(newPath);\n\n\t\t\tif (Webos.isInstanceOf(file, this.constructor)) {\n\t\t\t\tfile._updateData(thisData);\n\t\t\t} else {\n\t\t\t\tfile._updateData({\n\t\t\t\t\tis_dir: thisData.is_dir\n\t\t\t\t});\n\t\t\t}\n\t\t} else {\n\t\t\tfor (var key in updatedData) {\n\t\t\t\tthis.notify('update', { key: key, value: updatedData[key] });\n\t\t\t}\n\n\t\t\tWebos.File.notify('load', { file: this });\n\t\t}\n\t},"
+    "code": "_updateData: function(data) {\n\t\tvar updatedData = {};\n\t\tfor (var key in data) {\n\t\t\tif (this._get(key) !== data[key]) {\n\t\t\t\tupdatedData[key] = data[key];\n\t\t\t}\n\t\t}\n\n\t\tvar oldPath = this.get('path');\n\n\t\t//Il FAUT creer une copie de l'objet \"updatedData\" sinon il sera modifie par la fonction \"this.hydrate\"\n\t\tthis.hydrate($.extend({}, updatedData));\n\n\t\tvar parentDirPath = this.get('dirname');\n\t\tif (parentDirPath != this.get('path')) { //Dossier racine ?\n\t\t\tif (Webos.File.isCached(parentDirPath)) {\n\t\t\t\tvar parentDir = Webos.File.get(parentDirPath);\n\t\t\t\tif (parentDir._contents) {\n\t\t\t\t\tvar found = false;\n\t\t\t\t\tfor (var i = 0; i < parentDir._contents.length; i++) {\n\t\t\t\t\t\tif (parentDir._contents[i].get('path') == this.get('path')) {\n\t\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif (!found) {\n\t\t\t\t\t\tparentDir._contents.push(this);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tvar newPath = this.get('path');\n\n\t\tif (oldPath != newPath) {\n\t\t\tvar thisData = $.extend({}, this.data());\n\t\t\tthis.hydrate({\n\t\t\t\tpath: oldPath\n\t\t\t});\n\t\t\tthis._remove();\n\n\t\t\tvar file = Webos.File.get(newPath);\n\n\t\t\tif (Webos.isInstanceOf(file, this.constructor)) {\n\t\t\t\tfile._updateData(thisData);\n\t\t\t} else {\n\t\t\t\tfile._updateData({\n\t\t\t\t\tis_dir: thisData.is_dir\n\t\t\t\t});\n\t\t\t}\n\t\t} else {\n\t\t\tfor (var key in updatedData) {\n\t\t\t\tthis.notify('update', { key: key, value: updatedData[key] });\n\t\t\t}\n\n\t\t\tWebos.File.notify('load', { file: this });\n\t\t}\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "_updateData",
+      "string": "Webos.File.prototype._updateData()"
+    }
   },
   {
     "tags": [
@@ -236,8 +255,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "_remove: function() {\n\t\tthis.notify('remove');\n\t\tWebos.File.notify('remove', { file: this });\n\n\t\tvar parentDirPath = this.get('dirname');\n\t\tif (parentDirPath != this.get('path')) { //Dossier racine ?\n\t\t\tif (Webos.File.isCached(parentDirPath)) {\n\t\t\t\tvar parentDir = Webos.File.get(parentDirPath);\n\t\t\t\tif (parentDir._contents) {\n\t\t\t\t\tvar list = [];\n\t\t\t\t\tfor (var i = 0; i < parentDir._contents.length; i++) {\n\t\t\t\t\t\tif (parentDir._contents[i].get('path') != this.get('path')) {\n\t\t\t\t\t\t\tlist.push(parentDir._contents[i]);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tparentDir._contents = list;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t\n\t\tWebos.File.clearCache(this.get('path'));\n\n\t\tdelete this;\n\t},"
+    "code": "_remove: function() {\n\t\tthis.notify('remove');\n\t\tWebos.File.notify('remove', { file: this });\n\n\t\tvar parentDirPath = this.get('dirname');\n\t\tif (parentDirPath != this.get('path')) { //Dossier racine ?\n\t\t\tif (Webos.File.isCached(parentDirPath)) {\n\t\t\t\tvar parentDir = Webos.File.get(parentDirPath);\n\t\t\t\tif (parentDir._contents) {\n\t\t\t\t\tvar list = [];\n\t\t\t\t\tfor (var i = 0; i < parentDir._contents.length; i++) {\n\t\t\t\t\t\tif (parentDir._contents[i].get('path') != this.get('path')) {\n\t\t\t\t\t\t\tlist.push(parentDir._contents[i]);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tparentDir._contents = list;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t\n\t\tWebos.File.clearCache(this.get('path'));\n\n\t\tdelete this;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "_remove",
+      "string": "Webos.File.prototype._remove()"
+    }
   },
   {
     "tags": [
@@ -260,8 +287,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "_unsupportedMethod: function(callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tcallback.error(Webos.Callback.Result.error('Cannot execute this operation on this type of file \"'+this.get('path')+'\"'));\n\t},"
+    "code": "_unsupportedMethod: function(callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tcallback.error(Webos.Callback.Result.error('Cannot execute this operation on this type of file \"'+this.get('path')+'\"'));\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "_unsupportedMethod",
+      "string": "Webos.File.prototype._unsupportedMethod()"
+    }
   },
   {
     "tags": [
@@ -280,8 +315,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "load: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "load: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "load",
+      "string": "Webos.File.prototype.load()"
+    }
   },
   {
     "tags": [
@@ -308,8 +351,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "rename: function(newName, callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "rename: function(newName, callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "rename",
+      "string": "Webos.File.prototype.rename()"
+    }
   },
   {
     "tags": [
@@ -328,8 +379,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "remove: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "remove: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "remove",
+      "string": "Webos.File.prototype.remove()"
+    }
   },
   {
     "tags": [
@@ -348,8 +407,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "readAsText: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "readAsText: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "readAsText",
+      "string": "Webos.File.prototype.readAsText()"
+    }
   },
   {
     "tags": [
@@ -368,8 +435,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "contents: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "contents: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "contents",
+      "string": "Webos.File.prototype.contents()"
+    }
   },
   {
     "tags": [
@@ -384,8 +459,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "getContents: function(callback) {\n\t\treturn this.contents(callback);\n\t},"
+    "code": "getContents: function(callback) {\n\t\treturn this.contents(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "getContents",
+      "string": "Webos.File.prototype.getContents()"
+    }
   },
   {
     "tags": [
@@ -398,8 +481,11 @@
         "description": "The new content for this file."
       },
       {
-        "type": "returns",
-        "string": "{Webos.ServerCall} The associated server call."
+        "type": "return",
+        "types": [
+          "Webos.ServerCall"
+        ],
+        "description": "The associated server call."
       },
       {
         "type": "private",
@@ -412,8 +498,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "_writeAsText: function(contents) {\n\t\tthis._unsupportedMethod();\n\t},"
+    "code": "_writeAsText: function(contents) {\n\t\tthis._unsupportedMethod();\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "_writeAsText",
+      "string": "Webos.File.prototype._writeAsText()"
+    }
   },
   {
     "tags": [
@@ -440,8 +534,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "writeAsText: function(contents, callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "writeAsText: function(contents, callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "writeAsText",
+      "string": "Webos.File.prototype.writeAsText()"
+    }
   },
   {
     "tags": [
@@ -472,8 +574,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "setContents: function(contents, callback) {\n\t\treturn this.writeAsText(contents, callback);\n\t},"
+    "code": "setContents: function(contents, callback) {\n\t\treturn this.writeAsText(contents, callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "setContents",
+      "string": "Webos.File.prototype.setContents()"
+    }
   },
   {
     "tags": [
@@ -492,8 +602,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "share: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},"
+    "code": "share: function(callback) {\n\t\tthis._unsupportedMethod(callback);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "share",
+      "string": "Webos.File.prototype.share()"
+    }
   },
   {
     "tags": [
@@ -506,8 +624,11 @@
         "description": "The name of the authorization. Can be \"read\" or \"write\"."
       },
       {
-        "type": "returns",
-        "string": "{Boolean} True if the user can execute the specified action, false otherwise."
+        "type": "return",
+        "types": [
+          "Boolean"
+        ],
+        "description": "True if the user can execute the specified action, false otherwise."
       }
     ],
     "description": {
@@ -516,8 +637,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "can: function(auth) {\n\t\tvar attr = (auth == 'read') ? 'readable' : 'writable';\n\t\t\n\t\treturn this.get(attr);\n\t},"
+    "code": "can: function(auth) {\n\t\tvar attr = (auth == 'read') ? 'readable' : 'writable';\n\t\t\n\t\treturn this.get(attr);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "can",
+      "string": "Webos.File.prototype.can()"
+    }
   },
   {
     "tags": [
@@ -530,8 +659,11 @@
         "description": "The label."
       },
       {
-        "type": "returns",
-        "string": "{Boolean} True if the file has the given label, false otherwise."
+        "type": "return",
+        "types": [
+          "Boolean"
+        ],
+        "description": "True if the file has the given label, false otherwise."
       }
     ],
     "description": {
@@ -540,8 +672,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "is: function(label) {\n\t\treturn (this._get('labels') && this._get('labels')[label]) ? true : false;\n\t},"
+    "code": "is: function(label) {\n\t\treturn (this._get('labels') && this._get('labels')[label]) ? true : false;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "is",
+      "string": "Webos.File.prototype.is()"
+    }
   },
   {
     "tags": [
@@ -562,8 +702,11 @@
         "description": "The callback."
       },
       {
-        "type": "returns",
-        "string": "{Boolean} True if the user can execute the specified action, false otherwise."
+        "type": "return",
+        "types": [
+          "Boolean"
+        ],
+        "description": "True if the user can execute the specified action, false otherwise."
       }
     ],
     "description": {
@@ -572,8 +715,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "checkAuthorization: function(auth, callback) {\n\t\tif (!this.can(auth)) {\n\t\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\t\n\t\t\tcallback.error(Webos.Callback.Result.error('Vous n\\'avez pas les droits requis pour ' + ((auth == 'read') ? 'ouvrir' : 'modifier') + ' le fichier \"' + this.get('path') + '\"'));\n\t\t\t\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn true;\n\t},"
+    "code": "checkAuthorization: function(auth, callback) {\n\t\tif (!this.can(auth)) {\n\t\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\t\n\t\t\tcallback.error(Webos.Callback.Result.error('Vous n\\'avez pas les droits requis pour ' + ((auth == 'read') ? 'ouvrir' : 'modifier') + ' le fichier \"' + this.get('path') + '\"'));\n\t\t\t\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn true;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "checkAuthorization",
+      "string": "Webos.File.prototype.checkAuthorization()"
+    }
   },
   {
     "tags": [],
@@ -583,7 +734,14 @@
       "body": ""
     },
     "ignore": false,
-    "code": "clearCache: function(filepath) {\n\t\tif (typeof this._contents == 'undefined') {\n\t\t\treturn;\n\t\t}\n\n\t\tif (filepath && this.get('is_dir')) {\n\t\t\tvar list = [];\n\t\t\tfor (var i = 0; i < this._contents.length; i++) {\n\t\t\t\tif (this._contents[i].get('path') != filepath) {\n\t\t\t\t\tlist.push(this._contents[i]);\n\t\t\t\t}\n\t\t\t}\n\t\t\tthis._contents = list;\n\t\t} else {\n\t\t\tdelete this._contents;\n\t\t}\n\t},\n\ttoString: function() {\n\t\treturn this.get('path');\n\t}\n};\nWebos.inherit(Webos.File, Webos.Model); //Héritage de Webos.Model\n\nWebos.Observable.build(Webos.File); //On construit un objet observable depuis Webos.File"
+    "code": "clearCache: function(filepath) {\n\t\tif (typeof this._contents == 'undefined') {\n\t\t\treturn;\n\t\t}\n\n\t\tif (filepath && this.get('is_dir')) {\n\t\t\tvar list = [];\n\t\t\tfor (var i = 0; i < this._contents.length; i++) {\n\t\t\t\tif (this._contents[i].get('path') != filepath) {\n\t\t\t\t\tlist.push(this._contents[i]);\n\t\t\t\t}\n\t\t\t}\n\t\t\tthis._contents = list;\n\t\t} else {\n\t\t\tdelete this._contents;\n\t\t}\n\t},\n\ttoString: function() {\n\t\treturn this.get('path');\n\t}\n};\nWebos.inherit(Webos.File, Webos.Model); //Héritage de Webos.Model\n\nWebos.Observable.build(Webos.File); //On construit un objet observable depuis Webos.File",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File",
+      "cons": "Webos.File",
+      "name": "clearCache",
+      "string": "Webos.File.prototype.clearCache()"
+    }
   },
   {
     "tags": [
@@ -602,6 +760,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File._cache = {};"
   },
@@ -622,6 +781,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File._mountedDevices = {};"
   },
@@ -630,10 +790,11 @@
       {
         "type": "param",
         "types": [
-          "file"
+          "String",
+          "Webos.File"
         ],
-        "name": "The",
-        "description": "path to the file."
+        "name": "file",
+        "description": "The path to the file."
       },
       {
         "type": "param",
@@ -652,8 +813,11 @@
         "description": "If set to true, the file will not be stored in the cache."
       },
       {
-        "type": "returns",
-        "string": "{Webos.File} The file."
+        "type": "return",
+        "types": [
+          "Webos.File"
+        ],
+        "description": "The file."
       },
       {
         "type": "static",
@@ -666,6 +830,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.get = function(file, data, disableCache) {\n\tif (window.File && file instanceof window.File) { //Si c'est un objet natif File, on retorune un objet Webos.LocalFile\n\t\treturn new Webos.LocalFile(file);\n\t} else if (Webos.isInstanceOf(file, Webos.File)) { //Si c'est déja un objet Webos.File, on le retourne directement\n\t\treturn file;\n\t}\n\n\tif (typeof file == 'undefined') {\n\t\treturn;\n\t}\n\n\tpath = String(file);\n\t\n\t//Le fichier est-il dans un volume monte ?\n\tvar devices = Webos.File.mountedDevices();\n\tfor (var local in devices) {\n\t\tif (Webos.File.cleanPath(path).indexOf(local) == 0) {\n\t\t\tif (Webos.File.isCached(path)) { //Si le fichier est dans le cache\n\t\t\t\treturn Webos.File._cache[path];\n\t\t\t} else {\n\t\t\t\tfile = Webos[devices[local].get('driver')].get(path, devices[local], data);\n\t\t\t\tif (!disableCache) {\n\t\t\t\t\tWebos.File._cache[file.get('path')] = file;\n\t\t\t\t}\n\t\t\t\treturn file;\n\t\t\t}\n\t\t}\n\t}\n\t\n\tif (Webos.File.isCached(path)) { //Si le fichier est dans le cache, on le retourne\n\t\treturn Webos.File._cache[path];\n\t} else {\n\t\t//Sinon, on crée un nouvel objet\n\t\tfile = new Webos.WebosFile($.extend({}, data, {\n\t\t\tpath: path\n\t\t}));\n\t\tif (!disableCache) {\n\t\t\tWebos.File._cache[file.get('path')] = file;\n\t\t}\n\t\treturn file;\n\t}\n};",
     "ctx": {
@@ -680,7 +845,8 @@
       {
         "type": "param",
         "types": [
-          "String"
+          "String",
+          "Webos.File"
         ],
         "name": "path",
         "description": "The path to the file."
@@ -704,6 +870,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.load = function(path, callback) {\n\tpath = String(path);\n\tcallback = Webos.Callback.toCallback(callback);\n\t\n\t//Ajouter un fichier au cache\n\tvar addFileToCacheFn = function(file) {\n\t\tif (typeof Webos.File._cache[file.get('path')] != 'undefined') {\n\t\t\tWebos.File._cache[file.get('path')]._hydrate(file.data());\n\t\t\tfile = Webos.File._cache[file.get('path')];\n\t\t\tWebos.File.notify('load', { file: file });\n\t\t} else {\n\t\t\tWebos.File._cache[file.get('path')] = file;\n\t\t}\n\t};\n\t\n\t//Le fichier est-il dans un volume monte ?\n\tvar devices = Webos.File.mountedDevices();\n\tfor (var local in devices) {\n\t\tif (Webos.File.cleanPath(path).indexOf(local) == 0) {\n\t\t\t(function(point) {\n\t\t\t\tWebos[point.get('driver')].load(path, point, [function(file) {\n\t\t\t\t\taddFileToCacheFn(file);\n\t\t\t\t\tcallback.success(file);\n\t\t\t\t}, callback.error]);\n\t\t\t})(devices[local]);\n\t\t\treturn;\n\t\t}\n\t}\n\t\n\tif (Webos.File.isCached(path)) { //Si le fichier est déja dans le cache, on le retourne\n\t\tcallback.success(Webos.File._cache[path]);\n\t} else { //Sinon, on le charge\n\t\tvar file = Webos.File.get(path, {}, false);\n\t\t\n\t\tfile.load(new Webos.Callback(function() {\n\t\t\t//On le stocke dans le cache\n\t\t\taddFileToCacheFn(file);\n\t\t\t\n\t\t\tcallback.success(file);\n\t\t}, callback.error));\n\t}\n};",
     "ctx": {
@@ -718,10 +885,11 @@
       {
         "type": "param",
         "types": [
-          "path"
+          "String",
+          "Webos.File"
         ],
-        "name": "The",
-        "description": "path to the directory."
+        "name": "path",
+        "description": "The path to the directory."
       },
       {
         "type": "param",
@@ -742,6 +910,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.listDir = function(path, callback) {\n\tcallback = Webos.Callback.toCallback(callback);\n\t\n\tvar file = Webos.File.get(path, { is_dir: true }); //On construit notre objet\n\n\t//Puis on récupére son contenu\n\tfile.contents([function(list) {\n\t\tcallback.success(list);\n\t}, callback.error]);\n};",
     "ctx": {
@@ -756,10 +925,11 @@
       {
         "type": "param",
         "types": [
-          "path"
+          "String",
+          "Webos.File"
         ],
-        "name": "The",
-        "description": "path to the new file."
+        "name": "path",
+        "description": "The path to the new file."
       },
       {
         "type": "param",
@@ -780,6 +950,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.createFile = function(path, callback) {\n\tcallback = Webos.Callback.toCallback(callback);\n\t\n\t//Le fichier est-il dans un volume monte ?\n\tvar devices = Webos.File.mountedDevices();\n\tfor (var local in devices) {\n\t\tif (Webos.File.cleanPath(path).indexOf(local) == 0) {\n\t\t\t(function(point) {\n\t\t\t\tWebos[point.get('driver')].createFile(path, point, [function(file) {\n\t\t\t\t\tcallback.success(file);\n\t\t\t\t}, callback.error]);\n\t\t\t})(devices[local]);\n\t\t\treturn;\n\t\t}\n\t}\n\t\n\treturn new Webos.ServerCall({\n\t\t'class': 'FileController',\n\t\tmethod: 'createFile',\n\t\targuments: {\n\t\t\tfile: path\n\t\t}\n\t}).load([function(response) {\n\t\tvar file = Webos.File.get(path);\n\t\tfile._updateData(response.getData());\n\t\tcallback.success(file);\n\t}, callback.error]);\n};",
     "ctx": {
@@ -794,10 +965,11 @@
       {
         "type": "param",
         "types": [
-          "path"
+          "String",
+          "Webos.File"
         ],
-        "name": "The",
-        "description": "path to the new folder."
+        "name": "path",
+        "description": "The path to the new folder."
       },
       {
         "type": "param",
@@ -818,6 +990,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.createFolder = function(path, callback) {\n\tcallback = Webos.Callback.toCallback(callback);\n\t\n\t//Le fichier est-il dans un volume monte ?\n\tvar devices = Webos.File.mountedDevices();\n\tfor (var local in devices) {\n\t\tif (Webos.File.cleanPath(path).indexOf(local) == 0) {\n\t\t\t(function(point) {\n\t\t\t\tWebos[point.get('driver')].createFolder(path, point, [function(file) {\n\t\t\t\t\tcallback.success(file);\n\t\t\t\t}, callback.error]);\n\t\t\t})(devices[local]);\n\t\t\treturn;\n\t\t}\n\t}\n\t\n\treturn new Webos.ServerCall({\n\t\t'class': 'FileController',\n\t\tmethod: 'createFolder',\n\t\targuments: {\n\t\t\tfile: path\n\t\t}\n\t}).load([function(response) {\n\t\tvar file = Webos.File.get(path);\n\t\tfile._updateData(response.getData());\n\t\tcallback.success(file);\n\t}, callback.error]);\n};",
     "ctx": {
@@ -866,6 +1039,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.copy = function(source, dest, callback) {\n\tsource = Webos.File.get(source);\n\tdest = Webos.File.get(dest);\n\tcallback = Webos.Callback.toCallback(callback);\n\n\tvar updateMetadataFn = function(source, dest, data) {\n\t\tvar metadataFile = new dest.constructor(data);\n\t\tvar file = Webos.File.get(metadataFile.get('path'));\n\t\tif (Webos.isInstanceOf(file, metadataFile.constructor)) {\n\t\t\tfile._updateData(metadataFile.data());\n\t\t} else {\n\t\t\tfile._updateData({\n\t\t\t\tis_dir: metadataFile.get('is_dir')\n\t\t\t});\n\t\t}\n\t\tfile._contents = source._contents;\n\t\t\n\t\treturn file;\n\t};\n\n\t//Copie cote serveur entre fichiers du webos\n\tif (Webos.isInstanceOf(source, Webos.WebosFile) && Webos.isInstanceOf(dest, Webos.WebosFile)) {\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'copy',\n\t\t\targuments: {\n\t\t\t\tsource: source.get('path'),\n\t\t\t\tdest: dest.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar file = updateMetadataFn(source, dest, response.getData());\n\n\t\t\tcallback.success(file);\n\t\t}, callback.error]);\n\t}\n\n\t//Copie cote serveur entre fichiers du meme volume\n\tif (source.get('mountPoint') && dest.get('mountPoint')) {\n\t\tif (source.get('mountPoint') === dest.get('mountPoint')) {\n\t\t\tvar point = source.get('mountPoint');\n\n\t\t\tif (typeof Webos[point.get('driver')].copy == 'function') {\n\t\t\t\treturn Webos[point.get('driver')].copy(source, dest, point, [function (data) {\n\t\t\t\t\tvar file = updateMetadataFn(source, dest, data);\n\n\t\t\t\t\tcallback.success(file);\n\t\t\t\t}, callback.error]);\n\t\t\t}\n\t\t}\n\t}\n\n\t//Copie entre volumes differents -> copie \"hardcore\" en full-JS\n\n\tvar copyDirFn = function(source, dest, callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tvar filesList, dirCreated = false;\n\t\tvar createChildFilesFn = function(dest) {\n\t\t\tif (!filesList || !dirCreated) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif (filesList.length == 0) {\n\t\t\t\tcallback.success();\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tvar copiedFilesNbr = 0, errorsNbr = 0, errorRes;\n\n\t\t\tvar triggerCallbackFn = function() {\n\t\t\t\tif (copiedFilesNbr == filesList.length) {\n\t\t\t\t\tcallback.success(dest);\n\t\t\t\t} else if (errorRes && errorsNbr == 1) {\n\t\t\t\t\tcallback.error(errorRes);\n\t\t\t\t}\n\t\t\t};\n\n\t\t\tfor (var i = 0; i < filesList.length; i++) {\n\t\t\t\t(function(file) {\n\t\t\t\t\tcopyFn(file, dest.get('path') + '/' + file.get('basename'), [function(newFile) {\n\t\t\t\t\t\tcopiedFilesNbr++;\n\t\t\t\t\t\ttriggerCallbackFn();\n\t\t\t\t\t}, function(response) {\n\t\t\t\t\t\terrorsNbr++;\n\t\t\t\t\t\terrorRes = response;\n\t\t\t\t\t\ttriggerCallbackFn();\n\t\t\t\t\t}]);\n\t\t\t\t})(filesList[i]);\n\t\t\t}\n\t\t};\n\n\t\tW.File.listDir(source, [function(list) {\n\t\t\tfilesList = list;\n\t\t\tcreateChildFilesFn(dest);\n\t\t}, callback.error]);\n\n\t\tif (dest.get('is_dir')) {\n\t\t\tdest = W.File.get(dest.get('path') + '/' + source.get('basename'));\n\t\t\tcopyDirFn(source, dest, callback);\n\t\t} else if (dest.get('is_dir') === false) {\n\t\t\tdest._unsupportedMethod(callback);\n\t\t} else {\n\t\t\tdest.load([function(dest) {\n\t\t\t\tcopyDirFn(source, dest, callback);\n\t\t\t}, function() {\n\t\t\t\tWebos.File.createFolder(dest, [function(dest) {\n\t\t\t\t\tdirCreated = true;\n\t\t\t\t\tcreateChildFilesFn(dest);\n\t\t\t\t}, callback.error]);\n\t\t\t}]);\n\t\t}\n\t};\n\n\tvar copyTextFileFn = function(source, dest, callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tsource.readAsText([function(contents) {\n\t\t\tdest.writeAsText(contents, [function() {\n\t\t\t\tcallback.success(dest);\n\t\t\t}, callback.error]);\n\t\t}, callback.error]);\n\t};\n\n\tvar copyBinaryFileFn = function(source, dest, callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tsource.readAsBinary([function(contents) {\n\t\t\tdest.writeAsBinary(contents, [function() {\n\t\t\t\tcallback.success(dest);\n\t\t\t}, callback.error]);\n\t\t}, callback.error]);\n\t};\n\n\tvar copyFn = function(source, dest, callback) {\n\t\tsource = Webos.File.get(source);\n\t\tdest = Webos.File.get(dest);\n\n\t\tif (source.get('is_dir')) {\n\t\t\tcopyDirFn(source, dest, callback);\n\t\t} else if (source.get('is_dir') === false) {\n\t\t\tif (dest.get('is_dir')) {\n\t\t\t\tdest = W.File.get(dest.get('path') + '/' + source.get('basename'));\n\t\t\t\tcopyFn(source, dest, callback);\n\t\t\t} else {\n\t\t\t\tif (source.get('is_binary') && typeof source.readAsBinary == 'function' && typeof dest.writeAsBinary == 'function') {\n\t\t\t\t\tcopyBinaryFileFn(source, dest, callback);\n\t\t\t\t} else {\n\t\t\t\t\tcopyTextFileFn(source, dest, callback);\n\t\t\t\t}\n\t\t\t}\n\t\t} else {\n\t\t\tsource.load([function(source) {\n\t\t\t\tcopyFn(source, dest, callback);\n\t\t\t}, callback.error]);\n\t\t}\n\t};\n\n\tcopyFn(source, dest, callback);\n};",
     "ctx": {
@@ -914,6 +1088,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.move = function(source, dest, callback) {\n\tsource = Webos.File.get(source);\n\tdest = Webos.File.get(dest);\n\tcallback = Webos.Callback.toCallback(callback);\n\n\tvar updateMetadataFn = function(source, dest, data) {\n\t\tvar contents = source._contents;\n\t\tsource._remove();\n\n\t\tvar metadataFile = new dest.constructor(data);\n\t\tvar file = Webos.File.get(metadataFile.get('path'));\n\t\tif (Webos.isInstanceOf(file, metadataFile.constructor)) {\n\t\t\tfile._updateData(metadataFile.data());\n\t\t} else {\n\t\t\tfile._updateData({\n\t\t\t\tis_dir: metadataFile.get('is_dir')\n\t\t\t});\n\t\t}\n\t\tfile._contents = contents;\n\t\t\n\t\treturn file;\n\t};\n\n\t//Deplacement cote serveur entre fichiers du webos\n\tif (Webos.isInstanceOf(source, Webos.WebosFile) && Webos.isInstanceOf(dest, Webos.WebosFile)) {\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'move',\n\t\t\targuments: {\n\t\t\t\tsource: source.get('path'),\n\t\t\t\tdest: dest.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar file = updateMetadataFn(source, dest, response.getData());\n\n\t\t\tcallback.success(file);\n\t\t}, callback.error]);\n\t}\n\n\t//Deplacement cote serveur entre fichiers du meme volume\n\tif (source.get('mountPoint') && dest.get('mountPoint')) {\n\t\tif (source.get('mountPoint') === dest.get('mountPoint')) {\n\t\t\tvar point = source.get('mountPoint');\n\n\t\t\tif (typeof Webos[point.get('driver')].move == 'function') {\n\t\t\t\treturn Webos[point.get('driver')].move(source, dest, point, [function(data) {\n\t\t\t\t\tvar file = updateMetadataFn(source, dest, data);\n\t\t\t\t\t\n\t\t\t\t\tcallback.success(file);\n\t\t\t\t}, callback.error]);\n\t\t\t}\n\t\t}\n\t}\n\n\t//Deplacement de fichiers de volumes differents -> deplacement \"hardcore\" en full-JS\n\tWebos.File.copy(source, dest, [function() {\n\t\tsource.remove([function() {\n\t\t\tcallback.success(dest);\n\t\t}, callback.error]);\n\t}, callback.error]);\n};",
     "ctx": {
@@ -936,6 +1111,7 @@
       {
         "type": "param",
         "types": [
+          "String",
           "Webos.File"
         ],
         "name": "file",
@@ -948,13 +1124,38 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "Webos.File.SearchResultItem = function(data, file) {\n\tWebos.Model.call(this, data);\n\n\tthis._file = file;\n};\nWebos.File.SearchResultItem.prototype = {\n\thydrate: function(data) {\n\t\treturn Webos.Model.prototype.hydrate.call(this, $.extend({\n\t\t\tmatchesNbr: 1\n\t\t}, data));\n\t},",
+    "code": "Webos.File.SearchResultItem = function(data, file) {\n\tWebos.Model.call(this, data);\n\n\tthis._file = file;\n};",
     "ctx": {
       "type": "method",
       "receiver": "Webos.File",
       "name": "SearchResultItem",
       "string": "Webos.File.SearchResultItem()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "namespace",
+        "string": "Webos.File.SearchResultItem"
+      }
+    ],
+    "description": {
+      "full": "Webos.File.SearchResultItem's prototype.",
+      "summary": "Webos.File.SearchResultItem's prototype.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "ignore": false,
+    "code": "Webos.File.SearchResultItem.prototype = {\n\thydrate: function(data) {\n\t\treturn Webos.Model.prototype.hydrate.call(this, $.extend({\n\t\t\tmatchesNbr: 1\n\t\t}, data));\n\t},",
+    "ctx": {
+      "type": "prototype",
+      "constructor": "Webos.File.SearchResultItem",
+      "cons": "Webos.File.SearchResultItem",
+      "name": "Webos.File.SearchResultItem",
+      "string": "Webos.File.SearchResultItem.prototype"
     }
   },
   {
@@ -973,8 +1174,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "file: function() {\n\t\treturn this._file;\n\t}\n};\nWebos.inherit(Webos.File.SearchResultItem, Webos.Model);"
+    "code": "file: function() {\n\t\treturn this._file;\n\t}\n};\nWebos.inherit(Webos.File.SearchResultItem, Webos.Model);",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.SearchResultItem",
+      "cons": "Webos.File.SearchResultItem",
+      "name": "file",
+      "string": "Webos.File.SearchResultItem.prototype.file()"
+    }
   },
   {
     "tags": [
@@ -1008,6 +1217,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.search = function(options, callback) {\n\toptions = $.extend({\n\t\tq: '',\n\t\tinDir: '~'\n\t}, options);\n\tsearchDir = Webos.File.get(options.inDir);\n\n\tvar operation = new Webos.Operation();\n\toperation.addCallbacks(callback);\n\n\tif (!options.q.trim()) {\n\t\toperation.setCompleted(Webos.Callback.Result.error('Empty search query'));\n\t\treturn operation;\n\t}\n\n\tvar searchesOpsList = [], searchesResults = [];\n\n\tvar addResults = function(results) {\n\t\tsearchesResults = searchesResults.concat(results);\n\t};\n\n\tif (Webos.isInstanceOf(searchDir, Webos.WebosFile)) {\n\t\t//Search in the webos's files\n\t\tsearchesOpsList.push(new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'search',\n\t\t\targuments: {\n\t\t\t\tquery: options.q,\n\t\t\t\tinDir: options.inDir\n\t\t\t}\n\t\t}).load([function(res) {\n\t\t\tvar data = res.getData();\n\t\t\tvar list = [];\n\t\t\tfor (var key in data) {\n\t\t\t\tvar webosFile = new Webos.WebosFile(data[key]);\n\t\t\t\tvar file = Webos.File.get(webosFile.get('path'));\n\t\t\t\tif (Webos.isInstanceOf(file, Webos.WebosFile)) {\n\t\t\t\t\tfile._updateData(webosFile.data());\n\t\t\t\t} else {\n\t\t\t\t\tfile._updateData({\n\t\t\t\t\t\tis_dir: webosFile.get('is_dir')\n\t\t\t\t\t});\n\t\t\t\t}\n\n\t\t\t\tvar searchResult = new Webos.File.SearchResultItem({\n\t\t\t\t\tmatchesNbr: data[key].matchesNbr\n\t\t\t\t}, file);\n\t\t\t\tlist.push(searchResult);\n\t\t\t}\n\n\t\t\taddResults(list);\n\t\t}, function(res) {\n\t\t\toperation.trigger('error', {\n\t\t\t\tresult: res\n\t\t\t});\n\t\t}]));\n\t}\n\n\tvar mountedList = Webos.File.mountedDevices();\n\tfor (var localPath in mountedList) {\n\t\tvar mountedDev = mountedList[localPath];\n\n\t\tif (searchDir.get('path') == localPath || localPath.indexOf(searchDir.get('path')+'/') == 0) {\n\t\t\t//Search in this device\n\t\t\t//TODO\n\t\t}\n\t}\n\n\tvar searchesOps = Webos.Observable.group(searchesOpsList);\n\tsearchesOps.on('success', function() {\n\t\tif (searchesOps.observables().length > 1) {\n\t\t\tsearchesResults.sort(function(a, b) {\n\t\t\t\treturn b.get('matchesNbr') - a.get('matchesNbr');\n\t\t\t});\n\t\t}\n\n\t\toperation.setCompleted(searchesResults);\n\t});\n\n\treturn operation;\n};\nWebos.File.searchInCache = function() {};",
     "ctx": {
@@ -1022,14 +1232,18 @@
       {
         "type": "param",
         "types": [
-          "String"
+          "String",
+          "Webos.File"
         ],
         "name": "path",
         "description": "The path to the file."
       },
       {
-        "type": "returns",
-        "string": "{Boolean} True if the file is in the cache, false otherwise."
+        "type": "return",
+        "types": [
+          "Boolean"
+        ],
+        "description": "True if the file is in the cache, false otherwise."
       },
       {
         "type": "static",
@@ -1042,6 +1256,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.isCached = function(path) {\n\treturn (typeof Webos.File._cache[path] != 'undefined');\n};",
     "ctx": {
@@ -1056,7 +1271,8 @@
       {
         "type": "param",
         "types": [
-          "String"
+          "String",
+          "Webos.File"
         ],
         "name": "[path]",
         "description": "If specified, only the corresponding file's cache will be cleared."
@@ -1080,6 +1296,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.clearCache = function(path, clearParentCache) {\n\tif (typeof path == 'undefined') {\n\t\tWebos.File._cache = {};\n\t} else {\n\t\tif (Webos.File._cache[path]) {\n\t\t\tvar file = Webos.File._cache[path], parentDirPath = file.get('dirname');\n\t\t\tif (parentDirPath != file.get('path')) { //Dossier racine ?\n\t\t\t\tif (Webos.File.isCached(parentDirPath)) {\n\t\t\t\t\tvar parentDir = Webos.File.get(parentDirPath);\n\t\t\t\t\tif (clearParentCache) {\n\t\t\t\t\t\tparentDir.clearCache();\n\t\t\t\t\t} else {\n\t\t\t\t\t\tparentDir.clearCache(file.get('path'));\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tdelete Webos.File._cache[path];\n\t}\n};",
     "ctx": {
@@ -1100,8 +1317,11 @@
         "description": "The path to clean."
       },
       {
-        "type": "returns",
-        "string": "{String} The cleaned path."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The cleaned path."
       },
       {
         "type": "static",
@@ -1114,6 +1334,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.cleanPath = function(path) {\n\tpath = String(path);\n\t\n\treturn path\n\t\t.replace(/\\/+/g, '/')\n\t\t.replace('/./', '/')\n\t\t.replace(/\\/\\.$/, '/')\n\t\t.replace(/(.+)\\/$/, '$1');\n};",
     "ctx": {
@@ -1134,8 +1355,11 @@
         "description": "The size to convert."
       },
       {
-        "type": "returns",
-        "string": "{String} The converted size, followed by its unit."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The converted size, followed by its unit."
       },
       {
         "type": "static",
@@ -1148,6 +1372,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.bytesToSize = function(bytes) {\n\tvar sizes = ['octets', 'Kio', 'Mio', 'Gio', 'Tio', 'Pio', 'Eio', 'Zio', 'Yio'];\n\tif (bytes <= 1)\n\t\treturn bytes+' octet';\n\tvar i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));\n\treturn ((i == 0) ? (bytes / Math.pow(1024, i))\n\t\t\t: (bytes / Math.pow(1024, i)).toFixed(1))\n\t\t\t+ ' ' + sizes[i];\n};",
     "ctx": {
@@ -1194,10 +1419,11 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": true,
     "ignore": false,
-    "code": "Webos.File.MountPoint = function WMountPoint(data, local) {\n\tWebos.Model.call(this, data);\n\t\n\tthis._local = local;\n};\nWebos.File.MountPoint.prototype = {",
+    "code": "Webos.File.MountPoint = function WMountPoint(data, local) {\n\tWebos.Model.call(this, data);\n\t\n\tthis._local = local;\n};",
     "ctx": {
-      "type": "method",
+      "type": "constructor",
       "receiver": "Webos.File",
       "name": "MountPoint",
       "string": "Webos.File.MountPoint()"
@@ -1206,8 +1432,35 @@
   {
     "tags": [
       {
-        "type": "returns",
-        "string": "{String}"
+        "type": "namespace",
+        "string": "Webos.File.MountPoint"
+      }
+    ],
+    "description": {
+      "full": "Webos.File.MountPoint's prototype.",
+      "summary": "Webos.File.MountPoint's prototype.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "ignore": false,
+    "code": "Webos.File.MountPoint.prototype = {",
+    "ctx": {
+      "type": "prototype",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "Webos.File.MountPoint",
+      "string": "Webos.File.MountPoint.prototype"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": ""
       }
     ],
     "description": {
@@ -1216,8 +1469,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "local: function() {\n\t\treturn this._local;\n\t},"
+    "code": "local: function() {\n\t\treturn this._local;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "local",
+      "string": "Webos.File.MountPoint.prototype.local()"
+    }
   },
   {
     "tags": [
@@ -1236,14 +1497,25 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "setData: function(data) {\n\t\tthis._data.data = data;\n\t},"
+    "code": "setData: function(data) {\n\t\tthis._data.data = data;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "setData",
+      "string": "Webos.File.MountPoint.prototype.setData()"
+    }
   },
   {
     "tags": [
       {
-        "type": "returns",
-        "string": "{Object}"
+        "type": "return",
+        "types": [
+          "Object"
+        ],
+        "description": ""
       }
     ],
     "description": {
@@ -1252,8 +1524,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "data: function() {\n\t\treturn this._data.data;\n\t},"
+    "code": "data: function() {\n\t\treturn this._data.data;\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "data",
+      "string": "Webos.File.MountPoint.prototype.data()"
+    }
   },
   {
     "tags": [
@@ -1266,8 +1546,11 @@
         "description": "The absolute path."
       },
       {
-        "type": "returns",
-        "string": "{String} The path, relative to this mount point's local path."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The path, relative to this mount point's local path."
       }
     ],
     "description": {
@@ -1276,8 +1559,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "getRelativePath: function(path) {\n\t\treturn Webos.File.cleanPath(String(path).replace(this.get('local'), this.get('remote') + '/'));\n\t},"
+    "code": "getRelativePath: function(path) {\n\t\treturn Webos.File.cleanPath(String(path).replace(this.get('local'), this.get('remote') + '/'));\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "getRelativePath",
+      "string": "Webos.File.MountPoint.prototype.getRelativePath()"
+    }
   },
   {
     "tags": [
@@ -1290,8 +1581,11 @@
         "description": "The path, relative to this mount point's local path."
       },
       {
-        "type": "returns",
-        "string": "{String} The absolute path."
+        "type": "return",
+        "types": [
+          "String"
+        ],
+        "description": "The absolute path."
       }
     ],
     "description": {
@@ -1300,8 +1594,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "getWebosPath: function(path) {\n\t\tif (!this.get('remote')) {\n\t\t\treturn Webos.File.cleanPath(this.get('local') + '/' + String(path));\n\t\t}\n\t\t\n\t\treturn Webos.File.cleanPath(String(path).replace(this.get('remote'), this.get('local') + '/'));\n\t}\n};\nWebos.inherit(Webos.File.MountPoint, Webos.Model);"
+    "code": "getWebosPath: function(path) {\n\t\tif (!this.get('remote')) {\n\t\t\treturn Webos.File.cleanPath(this.get('local') + '/' + String(path));\n\t\t}\n\t\t\n\t\treturn Webos.File.cleanPath(String(path).replace(this.get('remote'), this.get('local') + '/'));\n\t}\n};\nWebos.inherit(Webos.File.MountPoint, Webos.Model);",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.File.MountPoint",
+      "cons": "Webos.File.MountPoint",
+      "name": "getWebosPath",
+      "string": "Webos.File.MountPoint.prototype.getWebosPath()"
+    }
   },
   {
     "tags": [
@@ -1328,6 +1630,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.mount = function(point, callback) {\n\tcallback = Webos.Callback.toCallback(callback);\n\t\n\tif (!Webos[point.get('driver')]) {\n\t\tcallback.error();\n\t\treturn;\n\t}\n\t\n\tif (Webos.File._mountedDevices[point.get('local')]) {\n\t\tcallback.error();\n\t\treturn;\n\t}\n\t\n\tvar mountFn = function() {\n\t\tvar mountFn = function() {\n\t\t\tWebos.File._mountedDevices[point.get('local')] = point;\n\t\t\tWebos.File.notify('mount', { local: point.get('local'), remote: point.get('remote'), driver: point.get('driver'), point: point });\n\t\t\t\n\t\t\tWebos.File.clearCache(point.get('local'), true);\n\n\t\t\tcallback.success(point);\n\t\t};\n\t\t\n\t\tif (typeof Webos[point.get('driver')].mount == 'function') {\n\t\t\tWebos[point.get('driver')].mount(point, [function(newPoint) {\n\t\t\t\tif (newPoint) {\n\t\t\t\t\tpoint = newPoint;\n\t\t\t\t}\n\t\t\t\tmountFn();\n\t\t\t}, callback.error]);\n\t\t} else {\n\t\t\tmountFn();\n\t\t}\n\t};\n\t\n\tvar init = true, devices = Webos.File.mountedDevices();\n\tfor (var index in devices) {\n\t\tif (devices[index].get('driver') == point.get('driver')) {\n\t\t\tinit = false;\n\t\t\tbreak;\n\t\t}\n\t}\n\tif (init && typeof Webos[point.get('driver')].init == 'function') {\n\t\tWebos[point.get('driver')].init([function() {\n\t\t\tmountFn();\n\t\t}, callback.error]);\n\t} else {\n\t\tmountFn();\n\t}\n};",
     "ctx": {
@@ -1340,8 +1643,11 @@
   {
     "tags": [
       {
-        "type": "returns",
-        "string": "{Object} An object containing local paths and associated mount points."
+        "type": "return",
+        "types": [
+          "Object"
+        ],
+        "description": "An object containing local paths and associated mount points."
       }
     ],
     "description": {
@@ -1350,6 +1656,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.mountedDevices = function() {\n\treturn Webos.File._mountedDevices;\n};",
     "ctx": {
@@ -1370,8 +1677,11 @@
         "description": "The mount point's local path."
       },
       {
-        "type": "returns",
-        "string": "{Webos.File.MountPoint} point The mount point."
+        "type": "return",
+        "types": [
+          "Webos.File.MountPoint"
+        ],
+        "description": "point The mount point."
       }
     ],
     "description": {
@@ -1380,6 +1690,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.getMountData = function(local) {\n\treturn Webos.File._mountedDevices[local];\n};",
     "ctx": {
@@ -1406,6 +1717,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.umount = function(local) {\n\tif (Webos.File._mountedDevices[local]) {\n\t\tvar point = Webos.File._mountedDevices[local], data = { local: point.get('local'), driver: point.get('driver'), remote: point.get('remote'), point: point };\n\t\tdelete Webos.File._mountedDevices[local];\n\t\tWebos.File.notify('umount', data);\n\n\t\tWebos.File.clearCache(data.local, true);\n\t}\n};",
     "ctx": {
@@ -1432,6 +1744,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File._drivers = {};"
   },
@@ -1460,6 +1773,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.registerDriver = function(driverName, data) {\n\tif (!Webos[driverName]) {\n\t\treturn false;\n\t}\n\t\n\tWebos.File._drivers[driverName] = {\n\t\ttitle: data.title,\n\t\ticon: data.icon,\n\t\tlib: data.lib\n\t};\n};",
     "ctx": {
@@ -1480,8 +1794,11 @@
         "description": "The driver's name."
       },
       {
-        "type": "returns",
-        "string": "{Object} data The driver's data."
+        "type": "return",
+        "types": [
+          "Object"
+        ],
+        "description": "data The driver's data."
       }
     ],
     "description": {
@@ -1490,6 +1807,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.File.getDriverData = function(driverName) {\n\treturn Webos.File._drivers[driverName];\n};",
     "ctx": {
@@ -1528,13 +1846,38 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": true,
     "ignore": false,
-    "code": "Webos.WebosFile = function WWebosFile(data) {\n\tWebos.File.call(this, data); //On appelle la classe parente\n};\nWebos.WebosFile.prototype = {\n\thydrate: function(data) {\n\t\tif (data.path) {\n\t\t\tdata.path = Webos.File.cleanPath(data.path); //On nettoie le chemin recu\n\n\t\t\tif (!data.realpath) { //On définit automatiquement le chemin réel si non présent\n\t\t\t\tdata.realpath = 'sbin/rawdatacall.php?type=file&path='+data.path;\n\t\t\t}\n\t\t}\n\t\t\n\t\tif (typeof data.readable == 'undefined') {\n\t\t\tdata.readable = true;\n\t\t}\n\t\tif (typeof data.writable == 'undefined') {\n\t\t\tdata.writable = true;\n\t\t}\n\n\t\treturn Webos.File.prototype.hydrate.call(this, data);\n\t},\n\tload: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getData',\n\t\t\targuments: {\n\t\t\t\tpath: this.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar data = response.getData();\n\n\t\t\tthat._updateData(data);\n\n\t\t\tcallback.success(that);\n\t\t}, callback.error]);\n\t},\n\trename: function(newName, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'rename',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tnewName: newName\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar data = response.getData();\n\n\t\t\tthat._updateData(data);\n\n\t\t\tcallback.success(that);\n\t\t}, callback.error]);\n\t},\n\tremove: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'delete',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function() {\n\t\t\tthat._remove();\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},\n\treadAsText: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (typeof this._contents != 'undefined') {\n\t\t\tcallback.success(this._contents);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getContents',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat.hydrate({\n\t\t\t\tis_dir: false\n\t\t\t});\n\n\t\t\tvar contents = response.getStandardChannel();\n\t\t\tthat._contents = contents;\n\t\t\tcallback.success(contents);\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\t\t\tWebos.File.notify('load', { file: that });\n\t\t}, callback.error]);\n\t},\n\tcontents: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (typeof this._contents != 'undefined') {\n\t\t\tcallback.success(this._contents);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\treturn new Webos.ServerCall({\n\t\t\t\t'class': 'FileController',\n\t\t\t\tmethod: 'getContents',\n\t\t\t\targuments: {\n\t\t\t\t\tdir: this.get('path')\n\t\t\t\t}\n\t\t\t}).load([function(response) {\n\t\t\t\tvar data = response.getData();\n\t\t\t\tvar list = [];\n\t\t\t\tfor (var key in data) {\n\t\t\t\t\tvar webosFile = new Webos.WebosFile(data[key]);\n\t\t\t\t\tvar file = Webos.File.get(webosFile.get('path'));\n\t\t\t\t\tif (Webos.isInstanceOf(file, Webos.WebosFile)) {\n\t\t\t\t\t\tfile._updateData(webosFile.data());\n\t\t\t\t\t} else {\n\t\t\t\t\t\tfile._updateData({\n\t\t\t\t\t\t\tis_dir: webosFile.get('is_dir')\n\t\t\t\t\t\t});\n\t\t\t\t\t}\n\t\t\t\t\tlist.push(file);\n\t\t\t\t}\n\n\t\t\t\tthat._contents = list;\n\n\t\t\t\tcallback.success(list);\n\n\t\t\t\tthat.notify('updatecontents', { contents: list });\n\t\t\t\tWebos.File.notify('load', { file: that });\n\t\t\t}, callback.error]);\n\t\t} else {\n\t\t\treturn this.readAsText(callback);\n\t\t}\n\t},",
+    "code": "Webos.WebosFile = function WWebosFile(data) {\n\tWebos.File.call(this, data); //On appelle la classe parente\n};",
     "ctx": {
-      "type": "method",
+      "type": "constructor",
       "receiver": "Webos",
       "name": "WebosFile",
       "string": "Webos.WebosFile()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "namespace",
+        "string": "Webos.WebosFile"
+      }
+    ],
+    "description": {
+      "full": "Webos.WebosFile's prototype.",
+      "summary": "Webos.WebosFile's prototype.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "ignore": false,
+    "code": "Webos.WebosFile.prototype = {\n\thydrate: function(data) {\n\t\tif (data.path) {\n\t\t\tdata.path = Webos.File.cleanPath(data.path); //On nettoie le chemin recu\n\n\t\t\tif (!data.realpath) { //On définit automatiquement le chemin réel si non présent\n\t\t\t\tdata.realpath = 'sbin/rawdatacall.php?type=file&path='+data.path;\n\t\t\t}\n\t\t}\n\t\t\n\t\tif (typeof data.readable == 'undefined') {\n\t\t\tdata.readable = true;\n\t\t}\n\t\tif (typeof data.writable == 'undefined') {\n\t\t\tdata.writable = true;\n\t\t}\n\n\t\treturn Webos.File.prototype.hydrate.call(this, data);\n\t},\n\tload: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getData',\n\t\t\targuments: {\n\t\t\t\tpath: this.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar data = response.getData();\n\n\t\t\tthat._updateData(data);\n\n\t\t\tcallback.success(that);\n\t\t}, callback.error]);\n\t},\n\trename: function(newName, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'rename',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tnewName: newName\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar data = response.getData();\n\n\t\t\tthat._updateData(data);\n\n\t\t\tcallback.success(that);\n\t\t}, callback.error]);\n\t},\n\tremove: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'delete',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function() {\n\t\t\tthat._remove();\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},\n\treadAsText: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (typeof this._contents != 'undefined') {\n\t\t\tcallback.success(this._contents);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getContents',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat.hydrate({\n\t\t\t\tis_dir: false\n\t\t\t});\n\n\t\t\tvar contents = response.getStandardChannel();\n\t\t\tthat._contents = contents;\n\t\t\tcallback.success(contents);\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\t\t\tWebos.File.notify('load', { file: that });\n\t\t}, callback.error]);\n\t},\n\tcontents: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (typeof this._contents != 'undefined') {\n\t\t\tcallback.success(this._contents);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\treturn new Webos.ServerCall({\n\t\t\t\t'class': 'FileController',\n\t\t\t\tmethod: 'getContents',\n\t\t\t\targuments: {\n\t\t\t\t\tdir: this.get('path')\n\t\t\t\t}\n\t\t\t}).load([function(response) {\n\t\t\t\tvar data = response.getData();\n\t\t\t\tvar list = [];\n\t\t\t\tfor (var key in data) {\n\t\t\t\t\tvar webosFile = new Webos.WebosFile(data[key]);\n\t\t\t\t\tvar file = Webos.File.get(webosFile.get('path'));\n\t\t\t\t\tif (Webos.isInstanceOf(file, Webos.WebosFile)) {\n\t\t\t\t\t\tfile._updateData(webosFile.data());\n\t\t\t\t\t} else {\n\t\t\t\t\t\tfile._updateData({\n\t\t\t\t\t\t\tis_dir: webosFile.get('is_dir')\n\t\t\t\t\t\t});\n\t\t\t\t\t}\n\t\t\t\t\tlist.push(file);\n\t\t\t\t}\n\n\t\t\t\tthat._contents = list;\n\n\t\t\t\tcallback.success(list);\n\n\t\t\t\tthat.notify('updatecontents', { contents: list });\n\t\t\t\tWebos.File.notify('load', { file: that });\n\t\t\t}, callback.error]);\n\t\t} else {\n\t\t\treturn this.readAsText(callback);\n\t\t}\n\t},",
+    "ctx": {
+      "type": "prototype",
+      "constructor": "Webos.WebosFile",
+      "cons": "Webos.WebosFile",
+      "name": "Webos.WebosFile",
+      "string": "Webos.WebosFile.prototype"
     }
   },
   {
@@ -1554,8 +1897,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "readAsBinary: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getAsBinary',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat.hydrate({\n\t\t\t\tis_dir: false\n\t\t\t});\n\t\t\t\n\t\t\tvar contents = response.getStandardChannel();\n\t\t\tcallback.success(contents);\n\t\t}, callback.error]);\n\t},\n\t_writeAsText: function(contents) {\n\t\tvar that = this;\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (!this.can('write')) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tvar call = new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'setContents',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tcontents: contents\n\t\t\t}\n\t\t});\n\n\t\tcall.bind('success', function(data) {\n\t\t\tvar response = data.result;\n\n\t\t\tthat._contents = contents;\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\n\t\t\tthat._updateData(response.getData());\n\t\t});\n\n\t\treturn call;\n\t},\n\twriteAsText: function(contents, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\tvar call = this._writeAsText(contents);\n\n\t\treturn call.load([function(response) {\n\t\t\tthat._contents = contents;\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\n\t\t\tthat._updateData(response.getData());\n\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},"
+    "code": "readAsBinary: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('read', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'getAsBinary',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat.hydrate({\n\t\t\t\tis_dir: false\n\t\t\t});\n\t\t\t\n\t\t\tvar contents = response.getStandardChannel();\n\t\t\tcallback.success(contents);\n\t\t}, callback.error]);\n\t},\n\t_writeAsText: function(contents) {\n\t\tvar that = this;\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tif (!this.can('write')) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tvar call = new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'setContents',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tcontents: contents\n\t\t\t}\n\t\t});\n\n\t\tcall.bind('success', function(data) {\n\t\t\tvar response = data.result;\n\n\t\t\tthat._contents = contents;\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\n\t\t\tthat._updateData(response.getData());\n\t\t});\n\n\t\treturn call;\n\t},\n\twriteAsText: function(contents, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\tvar call = this._writeAsText(contents);\n\n\t\treturn call.load([function(response) {\n\t\t\tthat._contents = contents;\n\n\t\t\tthat.notify('updatecontents', { contents: contents });\n\n\t\t\tthat._updateData(response.getData());\n\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.WebosFile",
+      "cons": "Webos.WebosFile",
+      "name": "readAsBinary",
+      "string": "Webos.WebosFile.prototype.readAsBinary()"
+    }
   },
   {
     "tags": [
@@ -1582,8 +1933,16 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
-    "code": "writeAsBinary: function(contents, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'setContentsAsBinary',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tcontents: contents\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat._updateData(response.getData());\n\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},\n\tshare: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'share',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar shareData = response.getData();\n\n\t\t\tcallback.success(shareData);\n\t\t}, callback.error]);\n\t}\n};\nWebos.inherit(Webos.WebosFile, Webos.File); //Héritage de Webos.File"
+    "code": "writeAsBinary: function(contents, callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (this.get('is_dir')) {\n\t\t\tthis._unsupportedMethod(callback);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'setContentsAsBinary',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path'),\n\t\t\t\tcontents: contents\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tthat._updateData(response.getData());\n\n\t\t\tcallback.success();\n\t\t}, callback.error]);\n\t},\n\tshare: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tif (!this.checkAuthorization('write', callback)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn new Webos.ServerCall({\n\t\t\t'class': 'FileController',\n\t\t\tmethod: 'share',\n\t\t\targuments: {\n\t\t\t\tfile: that.get('path')\n\t\t\t}\n\t\t}).load([function(response) {\n\t\t\tvar shareData = response.getData();\n\n\t\t\tcallback.success(shareData);\n\t\t}, callback.error]);\n\t}\n};\nWebos.inherit(Webos.WebosFile, Webos.File); //Héritage de Webos.File",
+    "ctx": {
+      "type": "method",
+      "constructor": "Webos.WebosFile",
+      "cons": "Webos.WebosFile",
+      "name": "writeAsBinary",
+      "string": "Webos.WebosFile.prototype.writeAsBinary()"
+    }
   },
   {
     "tags": [
@@ -1614,13 +1973,38 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": true,
     "ignore": false,
-    "code": "Webos.LocalFile = function WLocalFile(file) {\n\tthis._file = file;\n\t\n\tvar data = {};\n\t\n\tdata.basename = file.name || file.fileName;\n\tdata.path = data.basename;\n\tdata.dirname = '';\n\tdata.realpath = null;\n\tdata.is_dir = false;\n\tdata.size = file.size || file.fileSize;\n\tdata.extension = (/[.]/.exec(data.path)) ? /[^.]+$/.exec(data.path)[0] : null;\n\tdata.type = file.type;\n\t\n\tdata.readable = true;\n\tdata.writable = false;\n\t\n\tWebos.File.call(this, data); //On appelle la classe parente\n};\nWebos.LocalFile.prototype = {\n\trealpath: function() {\n\t\tif (!this._get('realpath')) {\n\t\t\tvar myURL = window.URL || window.webkitURL;\n\t\t\tif (myURL && myURL.createObjectURL) {\n\t\t\t\tthis.hydrate({\n\t\t\t\t\trealpath: myURL.createObjectURL(this._file)\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t\t\n\t\treturn this._get('realpath');\n\t},\n\tload: function(callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tcallback.success(this);\n\t},\n\treadAsText: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!window.FileReader) {\n\t\t\tcallback.error('La lecture de fichiers locaux n\\'est pas support&eacute;e par votre navigateur');\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tvar reader = new FileReader();\n\t\treader.onload = function(e) {\n\t\t\tcallback.success(e.target.result);\n\t\t};\n\t\treader.onerror = function(e) {\n\t\t\tcallback.error(e.target.result);\n\t\t};\n\t\treader.readAsText(this._file);\n\t},\n\treadAsBinary: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!window.FileReader) {\n\t\t\tcallback.error('La lecture de fichiers locaux n\\'est pas support&eacute;e par votre navigateur');\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tvar reader = new FileReader();\n\t\treader.onload = function(e) {\n\t\t\tvar contents = e.target.result;\n\t\t\tcontents = contents.replace(/^data:[a-zA-Z0-9-_\\/]+;base64,/, '');\n\t\t\tcallback.success(contents);\n\t\t};\n\t\treader.onerror = function(e) {\n\t\t\tcallback.error(e.target.result);\n\t\t};\n\t\treader.readAsDataURL(this._file);\n\t}\n};\nWebos.inherit(Webos.LocalFile, Webos.File); //Héritage de Webos.File",
+    "code": "Webos.LocalFile = function WLocalFile(file) {\n\tthis._file = file;\n\t\n\tvar data = {};\n\t\n\tdata.basename = file.name || file.fileName;\n\tdata.path = data.basename;\n\tdata.dirname = '';\n\tdata.realpath = null;\n\tdata.is_dir = false;\n\tdata.size = file.size || file.fileSize;\n\tdata.extension = (/[.]/.exec(data.path)) ? /[^.]+$/.exec(data.path)[0] : null;\n\tdata.type = file.type;\n\t\n\tdata.readable = true;\n\tdata.writable = false;\n\t\n\tWebos.File.call(this, data); //On appelle la classe parente\n};",
     "ctx": {
-      "type": "method",
+      "type": "constructor",
       "receiver": "Webos",
       "name": "LocalFile",
       "string": "Webos.LocalFile()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "namespace",
+        "string": "Webos.LocalFile"
+      }
+    ],
+    "description": {
+      "full": "Webos.LocalFile's prototype.",
+      "summary": "Webos.LocalFile's prototype.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "ignore": false,
+    "code": "Webos.LocalFile.prototype = {\n\trealpath: function() {\n\t\tif (!this._get('realpath')) {\n\t\t\tvar myURL = window.URL || window.webkitURL;\n\t\t\tif (myURL && myURL.createObjectURL) {\n\t\t\t\tthis.hydrate({\n\t\t\t\t\trealpath: myURL.createObjectURL(this._file)\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t\t\n\t\treturn this._get('realpath');\n\t},\n\tload: function(callback) {\n\t\tcallback = Webos.Callback.toCallback(callback);\n\n\t\tcallback.success(this);\n\t},\n\treadAsText: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!window.FileReader) {\n\t\t\tcallback.error('La lecture de fichiers locaux n\\'est pas support&eacute;e par votre navigateur');\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tvar reader = new FileReader();\n\t\treader.onload = function(e) {\n\t\t\tcallback.success(e.target.result);\n\t\t};\n\t\treader.onerror = function(e) {\n\t\t\tcallback.error(e.target.result);\n\t\t};\n\t\treader.readAsText(this._file);\n\t},\n\treadAsBinary: function(callback) {\n\t\tvar that = this;\n\t\tcallback = Webos.Callback.toCallback(callback);\n\t\t\n\t\tif (!window.FileReader) {\n\t\t\tcallback.error('La lecture de fichiers locaux n\\'est pas support&eacute;e par votre navigateur');\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tvar reader = new FileReader();\n\t\treader.onload = function(e) {\n\t\t\tvar contents = e.target.result;\n\t\t\tcontents = contents.replace(/^data:[a-zA-Z0-9-_\\/]+;base64,/, '');\n\t\t\tcallback.success(contents);\n\t\t};\n\t\treader.onerror = function(e) {\n\t\t\tcallback.error(e.target.result);\n\t\t};\n\t\treader.readAsDataURL(this._file);\n\t}\n};\nWebos.inherit(Webos.LocalFile, Webos.File); //Héritage de Webos.File",
+    "ctx": {
+      "type": "prototype",
+      "constructor": "Webos.LocalFile",
+      "cons": "Webos.LocalFile",
+      "name": "Webos.LocalFile",
+      "string": "Webos.LocalFile.prototype"
     }
   },
   {
@@ -1636,6 +2020,7 @@
       "body": ""
     },
     "isPrivate": false,
+    "isConstructor": false,
     "ignore": false,
     "code": "Webos.LocalFile.support = (window.File && window.FileReader) ? true : false;\n\n\n//Events\nWebos.User.bind('login logout', function() {\n\t//Lorsque l'utilisateur quitte sa session, on vide le cache\n\tWebos.File.clearCache();\n});\nWebos.User.bind('logout', function() {\n\t//On demonte tous les volumes\n\tfor (var local in Webos.File.mountedDevices()) {\n\t\tWebos.File.umount(local);\n\t}\n});\n\nnew Webos.ScriptFile('/usr/lib/webos/fstab.js');"
   }
