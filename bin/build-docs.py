@@ -10,16 +10,44 @@ args = parser.parse_args()
 
 inputPath = args.input
 outputPath = '../docs/'
-outputPrefix = 'JS library_'
 
-def isDocumented(className):
+docs = {}
+
+def getOutputPrefix(className):
+	if isLibrary(className):
+		return 'JS library_'
+	if isWidget(className):
+		return 'Widget_'
+
+	return ''
+
+def isGlobalObject(className):
+	return className in ['Object', 'Function', 'Boolean', 'Error', 'Number', 'Date', 'String', 'RegExp', 'Array']
+
+def isLibrary(className):
 	return (className.find('Webos.') == 0)
 
-def getOutputPath(className):
-	if isDocumented(className):
+def isWidget(className):
+	return (className.find('$.webos.') == 0)
+
+def isDocumented(className):
+	return isLibrary(className) or isWidget(className) or isGlobalObject(className) or className in docs
+
+def getOutputIndex(className):
+	outputPrefix = getOutputPrefix(className)
+
+	if isGlobalObject(className):
+		return 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/'+className
+
+	if isLibrary(className):
 		className = className[len('Webos.'):]
-	
-	return outputPrefix+className.lower()+'.md'
+	if isWidget(className):
+		className = className[len('$.webos.'):]
+
+	return outputPrefix+className.lower()
+
+def getOutputPath(className):
+	return getOutputIndex(className)+'.md'
 
 def isPrivate(block):
 	for tag in block['tags']:
@@ -37,23 +65,54 @@ def formatSince(tags):
 
 	return ''
 
+def formatAugments(tags):
+	augments = ''
+	for tag in tags:
+		if tag['type'] == 'augments':
+			augments = tag['otherClass']
+			return '\n\nChild of '+formatTypes(augments)+'.'
+
+	return ''
+
+def formatInlineDeprecated(tags):
+	deprecated = ''
+	for tag in tags:
+		if tag['type'] == 'deprecated':
+			deprecated = tag['string']
+			return '**Deprecated**: '+deprecated+'.'
+
+	return ''
+
+def formatDeprecated(tags):
+	deprecated = formatInlineDeprecated(tags)
+
+	if len(deprecated) > 0:
+		return '\n\n'+deprecated
+	else:
+		return ''
+
 def formatTypes(types):
 	if type(types) == str:
 		types = [types]
 	
 	i = 0
 	for typeName in types:
-		#if isDocumented(typeName):
-		#	types[i] = '['+typeName+']('+getOutputPath(typeName)+')'
+		if typeName[0] == '{' and typeName[-1] == '}':
+			typeName = typeName[1:-1]
+
+		if isDocumented(typeName):
+			types[i] = '['+typeName+']('+getOutputIndex(typeName)+')'
+		else:
+			types[i] = typeName
 		i += 1
 		
-	return '_' + '|'.join(types) + '_ '
+	return '_'+'|'.join(types)+'_'
 
 def formatReturnTypes(tags):
 	for tag in tags:
 		if tag['type'] == 'return' or tag['type'] == 'returns':
 			if 'types' in tag:
-				return formatTypes(tag['types'])
+				return formatTypes(tag['types'])+' '
 	return ''
 
 def formatParamsList(tags):
@@ -61,7 +120,8 @@ def formatParamsList(tags):
 	for tag in tags:
 		if tag['type'] == 'param':
 			if 'types' in tag:
-				paramTypes = formatTypes(tag['types'])
+				#paramTypes = formatTypes(tag['types']) #Do not print param types in params list
+				paramTypes = ''
 			else:
 				paramTypes = ''
 			paramsList.append(paramTypes+'**'+tag['name']+'**')
@@ -72,7 +132,7 @@ def formatParamsDescription(tags):
 	for tag in tags:
 		if tag['type'] == 'param':
 			if 'types' in tag:
-				paramTypes = formatTypes(tag['types'])
+				paramTypes = formatTypes(tag['types'])+' '
 			else:
 				paramTypes = ''
 			paramsDescription.append(paramTypes+'**'+tag['name']+'** '+tag['description'])
@@ -88,7 +148,6 @@ except ValueError:
 
 # Order by type
 fileOverview = None
-docs = {}
 i = 0
 for block in data:
 	if 'ctx' in block:
@@ -96,7 +155,11 @@ for block in data:
 
 		# Is it a class ?
 		if ctx['type'] == 'constructor':
-			className = ctx['receiver'] + '.' + ctx['name']
+			if 'receiver' in ctx:
+				className = ctx['receiver'] + '.' + ctx['name']
+			else:
+				className = ctx['name']
+
 			if className in docs:
 				docs[className]['class'] = block
 			else:
@@ -148,13 +211,38 @@ for block in data:
 for className in docs.keys():
 	classDoc = docs[className]
 
+	if className == 'this':
+		continue
+
 	output = ''
 
 	# Class
 	if 'class' in classDoc and classDoc['class'] is not None:
 		output += classDoc['class']['description']['full']
 		output += formatSince(classDoc['class']['tags'])
+		output += formatAugments(classDoc['class']['tags'])
+		output += formatDeprecated(classDoc['class']['tags'])
 		output += '\n\n'
+
+	# Options
+	if isWidget(className):
+		output += '# Options\n\n'
+
+		options = None
+		for block in classDoc['property']:
+			ctx = block['ctx']
+			if ctx['name'] == 'options':
+				options = block
+				break
+
+		if options is not None:
+			output += block['description']['full']+'\n'
+		else:
+			output += '_This widget hasn\'t any option._\n'
+
+		output += '\n'
+	else:
+		pass #TODO: print properties
 
 	# Methods
 	output += '# Methods\n\n'
@@ -166,13 +254,21 @@ for className in docs.keys():
 		returnTypes = formatReturnTypes(block['tags'])
 		paramsList = formatParamsList(block['tags'])
 		paramsDescription = formatParamsDescription(block['tags'])
+		deprecated = formatInlineDeprecated(block['tags'])
+		summary = block['description']['summary'].strip()
 
-		output += '* '+returnTypes+methodName+'('+paramsList+') : '+block['description']['summary']
+		output += '* '+returnTypes+methodName+'('+paramsList+') : '+summary
 
+		if len(deprecated) > 0:
+			output += '\n  '+deprecated
 		if len(paramsDescription) > 0:
 			output += paramsDescription
 
 		output += '\n'
+
+	if len(classDoc['method']) == 0:
+		output += '_This class hasn\'t any method._\n'
+
 	output += '\n'
 
 	# Static methods
@@ -185,13 +281,20 @@ for className in docs.keys():
 		returnTypes = formatReturnTypes(block['tags'])
 		paramsList = formatParamsList(block['tags'])
 		paramsDescription = formatParamsDescription(block['tags'])
+		deprecated = formatInlineDeprecated(block['tags'])
+		summary = block['description']['summary'].strip()
 
-		output += '* '+returnTypes+methodName+'('+paramsList+') : '+block['description']['summary']
+		output += '* '+returnTypes+methodName+'('+paramsList+') : '+summary
 
+		if len(deprecated) > 0:
+			output += '\n  '+deprecated
 		if len(paramsDescription) > 0:
 			output += paramsDescription
 
 		output += '\n'
+
+	if len(classDoc['static_method']) == 0:
+		output += '_This class hasn\'t any static method._\n'
 
 	outputFile = open(outputPath+'/'+getOutputPath(className), 'w')
 	outputFile.write(output)
